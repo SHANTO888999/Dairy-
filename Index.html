@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polytechnic Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1a237e;
+            --primary-light: #534bae;
+            --primary-dark: #000051;
+            --secondary: #f5f5f5;
+            --text: #333;
+            --text-light: #666;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #1a237e, #534bae);
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        
+        /* App Container */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            background: var(--gradient);
+            color: white;
+            position: fixed;
+            height: 100%;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-header h2 {
+            font-size: 1.3rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-menu li:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu li.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid white;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            transition: margin-left 0.3s ease;
+            width: 100%;
+        }
+        
+        .sidebar.open + .main-content {
+            margin-left: 250px;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        
+        .menu-toggle:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Page Content */
+        .page {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Home Page */
+        .home-page {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .polytechnic-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            border: 5px solid white;
+        }
+        
+        .home-title {
+            font-size: 2.2rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .home-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .home-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .home-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        
+        .koching-btn {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .institute-btn {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Subjects Page */
+        .subjects-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .add-subject-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        
+        .add-subject-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .subject-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .subject-name {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .subject-notes-count {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .notes-badge {
+            background: var(--success);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .subject-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: color 0.2s, background 0.2s;
+        }
+        
+        .action-btn:hover {
+            color: var(--primary);
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Notes Page */
+        .notes-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .notes-title-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notes-count-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .add-note-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        
+        .add-note-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .notes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .note-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary-light);
+        }
+        
+        .note-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .note-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .note-date {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        
+        .note-content {
+            color: var(--text);
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .note-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        /* Notification System */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 350px;
+        }
+        
+        .notification {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--success);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            animation: slideIn 0.3s ease forwards;
+        }
+        
+        .notification.success {
+            border-left-color: var(--success);
+        }
+        
+        .notification.warning {
+            border-left-color: var(--warning);
+        }
+        
+        .notification.error {
+            border-left-color: var(--error);
+        }
+        
+        .notification-icon {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .notification.success .notification-icon {
+            color: var(--success);
+        }
+        
+        .notification.warning .notification-icon {
+            color: var(--warning);
+        }
+        
+        .notification.error .notification-icon {
+            color: var(--error);
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+        
+        .notification-message {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: color 0.2s, background 0.2s;
+        }
+        
+        .notification-close:hover {
+            color: var(--primary);
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        @keyframes slideIn {
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideOut {
+            to {
+                transform: translateX(400px);
+            }
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal.open {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--gradient);
+            color: white;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: color 0.2s, background 0.2s;
+        }
+        
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.2s;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(26, 35, 126, 0.2);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-secondary {
+            background: #e0e0e0;
+            color: var(--text);
+        }
+        
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+            }
+            
+            .sidebar.open + .main-content {
+                margin-left: 0;
+            }
+            
+            .page-title {
+                font-size: 1.3rem;
+            }
+            
+            .home-title {
+                font-size: 1.8rem;
+            }
+            
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .home-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .home-btn {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
+            
+            .notification-container {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+            }
+        }
+        
+        /* Overlay for sidebar on mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+        
+        .sidebar.open ~ .sidebar-overlay {
+            display: block;
+        }
+        
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 90;
+            transition: all 0.3s ease;
+        }
+        
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>Polytechnic Notes</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span>SB</span>
+                </li>
+                <li data-page="koching">
+                    <i class="fas fa-book"></i>
+                    <span>Koching</span>
+                </li>
+                <li data-page="institute">
+                    <i class="fas fa-school"></i>
+                    <span>Institute</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title" id="pageTitle">SB</h1>
+                <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+            </div>
+            
+            <!-- Home Page -->
+            <div class="page active" id="home">
+                <div class="home-page">
+                    <img src="profile.Jpg" alt="Polytechnic Institute" class="polytechnic-image">
+                    <h1 class="home-title">Polytechnic Institute</h1>
+                    <p class="home-subtitle">WELCOME</p>
+                    
+                    <div class="home-buttons">
+                        <button class="home-btn koching-btn" id="kochingHomeBtn">
+                            <i class="fas fa-book"></i>
+                            Koching
+                        </button>
+                        <button class="home-btn institute-btn" id="instituteHomeBtn">
+                            <i class="fas fa-school"></i>
+                            Institute
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Koching Subjects Page -->
+            <div class="page" id="koching">
+                <div class="subjects-container">
+                    <div class="page-header">
+                        <h2>Koching Subjects</h2>
+                        <button class="add-subject-btn" id="addKochingSubjectBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Subject
+                        </button>
+                    </div>
+                    
+                    <div class="subjects-grid" id="kochingSubjectsGrid">
+                        <!-- Koching subjects will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Institute Subjects Page -->
+            <div class="page" id="institute">
+                <div class="subjects-container">
+                    <div class="page-header">
+                        <h2>Institute Subjects</h2>
+                        <button class="add-subject-btn" id="addInstituteSubjectBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Subject
+                        </button>
+                    </div>
+                    
+                    <div class="subjects-grid" id="instituteSubjectsGrid">
+                        <!-- Institute subjects will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notes Page -->
+            <div class="page" id="notes">
+                <div class="notes-container">
+                    <button class="back-btn" id="backToSubjectsBtn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Subjects
+                    </button>
+                    
+                    <div class="notes-header">
+                        <div class="notes-title-section">
+                            <h2 id="notesPageTitle">Subject Notes</h2>
+                            <span class="notes-count-badge" id="notesCountBadge">0 notes</span>
+                        </div>
+                        <button class="add-note-btn" id="addNoteBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Note
+                        </button>
+                    </div>
+                    
+                    <div class="notes-list" id="notesList">
+                        <!-- Notes will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Notification Container -->
+        <div class="notification-container" id="notificationContainer"></div>
+        
+        <!-- Overlay for sidebar on mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        
+        <!-- Floating Action Button -->
+        <button class="fab" id="fabHome">
+            <i class="fas fa-home"></i>
+        </button>
+        
+        <!-- Add Subject Modal -->
+        <div class="modal" id="addSubjectModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="addSubjectModalTitle">Add Subject</h3>
+                    <button class="close-btn" id="closeAddSubjectModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addSubjectForm">
+                        <div class="form-group">
+                            <label class="form-label" for="subjectName">Subject Name</label>
+                            <input type="text" class="form-input" id="subjectName" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelAddSubject">Cancel</button>
+                    <button class="btn btn-primary" id="saveSubject">Save Subject</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add Note Modal -->
+        <div class="modal" id="addNoteModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Add Note</h3>
+                    <button class="close-btn" id="closeAddNoteModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addNoteForm">
+                        <div class="form-group">
+                            <label class="form-label" for="noteTitle">Note Title</label>
+                            <input type="text" class="form-input" id="noteTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="noteContent">Note Content</label>
+                            <textarea class="form-input form-textarea" id="noteContent" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelAddNote">Cancel</button>
+                    <button class="btn btn-primary" id="saveNote">Save Note</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Delete Confirmation Modal -->
+        <div class="modal" id="deleteModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="deleteModalTitle">Confirm Delete</h3>
+                    <button class="close-btn" id="closeDeleteModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p id="deleteModalMessage">Are you sure you want to delete this item? This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelDelete">Cancel</button>
+                    <button class="btn btn-primary" id="confirmDelete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data structure to store subjects and notes
+        let appData = {
+            koching: [],
+            institute: []
+        };
+        
+        // Current state
+        let currentPage = 'home';
+        let currentSubjectType = null;
+        let currentSubjectId = null;
+        let itemToDelete = null;
+        let deleteType = null; // 'subject' or 'note'
+        
+        // DOM Elements
+        const sidebar = document.getElementById('sidebar');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const pageTitle = document.getElementById('pageTitle');
+        const pages = document.querySelectorAll('.page');
+        const sidebarMenuItems = document.querySelectorAll('.sidebar-menu li');
+        const fabHome = document.getElementById('fabHome');
+        const notificationContainer = document.getElementById('notificationContainer');
+        
+        // Modal elements
+        const addSubjectModal = document.getElementById('addSubjectModal');
+        const addNoteModal = document.getElementById('addNoteModal');
+        const deleteModal = document.getElementById('deleteModal');
+        
+        // Initialize the app
+        function init() {
+            // Load data from localStorage if available
+            loadData();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Render initial content
+            renderKochingSubjects();
+            renderInstituteSubjects();
+        }
+        
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Sidebar toggle
+            menuToggle.addEventListener('click', toggleSidebar);
+            sidebarOverlay.addEventListener('click', toggleSidebar);
+            
+            // Sidebar menu items
+            sidebarMenuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const page = item.dataset.page;
+                    navigateToPage(page);
+                    toggleSidebar();
+                });
+            });
+            
+            // Home page buttons
+            document.getElementById('kochingHomeBtn').addEventListener('click', () => {
+                navigateToPage('koching');
+            });
+            
+            document.getElementById('instituteHomeBtn').addEventListener('click', () => {
+                navigateToPage('institute');
+            });
+            
+            // Floating Action Button (Home)
+            fabHome.addEventListener('click', () => {
+                navigateToPage('home');
+            });
+            
+            // Add subject buttons
+            document.getElementById('addKochingSubjectBtn').addEventListener('click', () => {
+                openAddSubjectModal('koching');
+            });
+            
+            document.getElementById('addInstituteSubjectBtn').addEventListener('click', () => {
+                openAddSubjectModal('institute');
+            });
+            
+            // Back to subjects button
+            document.getElementById('backToSubjectsBtn').addEventListener('click', () => {
+                navigateToPage(currentSubjectType);
+            });
+            
+            // Add note button
+            document.getElementById('addNoteBtn').addEventListener('click', openAddNoteModal);
+            
+            // Modal close buttons
+            document.getElementById('closeAddSubjectModal').addEventListener('click', closeAddSubjectModal);
+            document.getElementById('closeAddNoteModal').addEventListener('click', closeAddNoteModal);
+            document.getElementById('closeDeleteModal').addEventListener('click', closeDeleteModal);
+            
+            // Modal cancel buttons
+            document.getElementById('cancelAddSubject').addEventListener('click', closeAddSubjectModal);
+            document.getElementById('cancelAddNote').addEventListener('click', closeAddNoteModal);
+            document.getElementById('cancelDelete').addEventListener('click', closeDeleteModal);
+            
+            // Save buttons
+            document.getElementById('saveSubject').addEventListener('click', saveSubject);
+            document.getElementById('saveNote').addEventListener('click', saveNote);
+            document.getElementById('confirmDelete').addEventListener('click', confirmDelete);
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === addSubjectModal) closeAddSubjectModal();
+                if (e.target === addNoteModal) closeAddNoteModal();
+                if (e.target === deleteModal) closeDeleteModal();
+            });
+        }
+        
+        // Toggle sidebar visibility
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+        }
+        
+        // Navigate to a specific page
+        function navigateToPage(page) {
+            // Update current page
+            currentPage = page;
+            
+            // Update page title
+            pageTitle.textContent = getPageTitle(page);
+            
+            // Hide all pages
+            pages.forEach(p => p.classList.remove('active'));
+            
+            // Show the target page
+            document.getElementById(page).classList.add('active');
+            
+            // Update active menu item
+            sidebarMenuItems.forEach(item => {
+                if (item.dataset.page === page) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+        
+        // Get page title based on page name
+        function getPageTitle(page) {
+            const titles = {
+                home: 'SB',
+                koching: 'Koching',
+                institute: 'Institute',
+                notes: 'Subject Notes'
+            };
+            return titles[page] || 'Polytechnic Notes';
+        }
+        
+        // Show notification
+        function showNotification(title, message, type = 'success', duration = 4000) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-exclamation-circle'}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            notificationContainer.appendChild(notification);
+            
+            // Auto remove after duration
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOut 0.3s ease forwards';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notificationContainer.removeChild(notification);
+                        }
+                    }, 300);
+                }
+            }, duration);
+            
+            // Close button event
+            const closeBtn = notification.querySelector('.notification-close');
+            closeBtn.addEventListener('click', () => {
+                notification.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notificationContainer.removeChild(notification);
+                    }
+                }, 300);
+            });
+        }
+        
+        // Open Add Subject Modal
+        function openAddSubjectModal(type) {
+            currentSubjectType = type;
+            document.getElementById('addSubjectModalTitle').textContent = `Add ${type === 'koching' ? 'Koching' : 'Institute'} Subject`;
+            document.getElementById('subjectName').value = '';
+            addSubjectModal.classList.add('open');
+        }
+        
+        // Close Add Subject Modal
+        function closeAddSubjectModal() {
+            addSubjectModal.classList.remove('open');
+        }
+        
+        // Save Subject
+        function saveSubject() {
+            const subjectName = document.getElementById('subjectName').value.trim();
+            
+            if (!subjectName) {
+                showNotification('Error', 'Please enter a subject name', 'error');
+                return;
+            }
+            
+            const newSubject = {
+                id: Date.now().toString(),
+                name: subjectName,
+                notes: []
+            };
+            
+            appData[currentSubjectType].push(newSubject);
+            saveData();
+            
+            if (currentSubjectType === 'koching') {
+                renderKochingSubjects();
+            } else {
+                renderInstituteSubjects();
+            }
+            
+            showNotification('Success', `"${subjectName}" subject added successfully!`, 'success');
+            closeAddSubjectModal();
+        }
+        
+        // Render Koching Subjects
+        function renderKochingSubjects() {
+            const container = document.getElementById('kochingSubjectsGrid');
+            renderSubjects(container, appData.koching, 'koching');
+        }
+        
+        // Render Institute Subjects
+        function renderInstituteSubjects() {
+            const container = document.getElementById('instituteSubjectsGrid');
+            renderSubjects(container, appData.institute, 'institute');
+        }
+        
+        // Render subjects to a container
+        function renderSubjects(container, subjects, type) {
+            if (subjects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3>No Subjects Yet</h3>
+                        <p>Add your first subject to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = subjects.map(subject => `
+                <div class="subject-card" data-id="${subject.id}">
+                    <h3 class="subject-name">${subject.name}</h3>
+                    <div class="subject-notes-count">
+                        <i class="fas fa-sticky-note"></i>
+                        ${subject.notes.length} note(s)
+                        <span class="notes-badge">${subject.notes.length}</span>
+                    </div>
+                    <div class="subject-actions">
+                        <button class="action-btn edit-subject" data-id="${subject.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-subject" data-id="${subject.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add event listeners to subject cards
+            container.querySelectorAll('.subject-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (!e.target.closest('.action-btn')) {
+                        const subjectId = card.dataset.id;
+                        openNotesPage(type, subjectId);
+                    }
+                });
+            });
+            
+            // Add event listeners to edit buttons
+            container.querySelectorAll('.edit-subject').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const subjectId = btn.dataset.id;
+                    editSubject(type, subjectId);
+                });
+            });
+            
+            // Add event listeners to delete buttons
+            container.querySelectorAll('.delete-subject').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const subjectId = btn.dataset.id;
+                    openDeleteModal('subject', type, subjectId);
+                });
+            });
+        }
+        
+        // Open Notes Page
+        function openNotesPage(type, subjectId) {
+            currentSubjectType = type;
+            currentSubjectId = subjectId;
+            
+            const subject = appData[type].find(s => s.id === subjectId);
+            if (subject) {
+                document.getElementById('notesPageTitle').textContent = `${subject.name} Notes`;
+                renderNotes();
+                navigateToPage('notes');
+            }
+        }
+        
+        // Render Notes
+        function renderNotes() {
+            const container = document.getElementById('notesList');
+            const subject = appData[currentSubjectType].find(s => s.id === currentSubjectId);
+            
+            // Update notes count badge
+            const notesCount = subject ? subject.notes.length : 0;
+            document.getElementById('notesCountBadge').textContent = `${notesCount} note${notesCount !== 1 ? 's' : ''}`;
+            
+            if (!subject || subject.notes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <h3>No Notes Yet</h3>
+                        <p>Add your first note to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = subject.notes.map(note => `
+                <div class="note-card" data-id="${note.id}">
+                    <div class="note-header">
+                        <h3 class="note-title">${note.title}</h3>
+                        <div class="note-date">${formatDate(note.date)}</div>
+                    </div>
+                    <div class="note-content">${note.content}</div>
+                    <div class="note-actions">
+                        <button class="action-btn delete-note" data-id="${note.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add event listeners to delete note buttons
+            container.querySelectorAll('.delete-note').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const noteId = btn.dataset.id;
+                    openDeleteModal('note', currentSubjectType, currentSubjectId, noteId);
+                });
+            });
+        }
+        
+        // Open Add Note Modal
+        function openAddNoteModal() {
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteContent').value = '';
+            addNoteModal.classList.add('open');
+        }
+        
+        // Close Add Note Modal
+        function closeAddNoteModal() {
+            addNoteModal.classList.remove('open');
+        }
+        
+        // Save Note
+        function saveNote() {
+            const noteTitle = document.getElementById('noteTitle').value.trim();
+            const noteContent = document.getElementById('noteContent').value.trim();
+            
+            if (!noteTitle || !noteContent) {
+                showNotification('Error', 'Please fill in both title and content', 'error');
+                return;
+            }
+            
+            const subject = appData[currentSubjectType].find(s => s.id === currentSubjectId);
+            if (subject) {
+                const newNote = {
+                    id: Date.now().toString(),
+                    title: noteTitle,
+                    content: noteContent,
+                    date: new Date().toISOString()
+                };
+                
+                subject.notes.push(newNote);
+                saveData();
+                renderNotes();
+                
+                // Show success notification
+                showNotification('Success', `"${noteTitle}" note saved successfully!`, 'success');
+                
+                // Update subject list to reflect new note count
+                if (currentSubjectType === 'koching') {
+                    renderKochingSubjects();
+                } else {
+                    renderInstituteSubjects();
+                }
+                
+                closeAddNoteModal();
+            }
+        }
+        
+        // Open Delete Confirmation Modal
+        function openDeleteModal(type, subjectType, subjectId, noteId = null) {
+            deleteType = type;
+            itemToDelete = { subjectType, subjectId, noteId };
+            
+            if (type === 'subject') {
+                const subject = appData[subjectType].find(s => s.id === subjectId);
+                document.getElementById('deleteModalTitle').textContent = 'Delete Subject';
+                document.getElementById('deleteModalMessage').textContent = `Are you sure you want to delete "${subject.name}"? This will also delete all notes in this subject.`;
+            } else {
+                const subject = appData[subjectType].find(s => s.id === subjectId);
+                const note = subject.notes.find(n => n.id === noteId);
+                document.getElementById('deleteModalTitle').textContent = 'Delete Note';
+                document.getElementById('deleteModalMessage').textContent = `Are you sure you want to delete the note "${note.title}"?`;
+            }
+            
+            deleteModal.classList.add('open');
+        }
+        
+        // Close Delete Modal
+        function closeDeleteModal() {
+            deleteModal.classList.remove('open');
+        }
+        
+        // Confirm Delete
+        function confirmDelete() {
+            if (deleteType === 'subject') {
+                const { subjectType, subjectId } = itemToDelete;
+                const subject = appData[subjectType].find(s => s.id === subjectId);
+                appData[subjectType] = appData[subjectType].filter(s => s.id !== subjectId);
+                
+                if (subjectType === 'koching') {
+                    renderKochingSubjects();
+                } else {
+                    renderInstituteSubjects();
+                }
+                
+                // If we're on the notes page for this subject, go back to subjects
+                if (currentPage === 'notes' && currentSubjectType === subjectType && currentSubjectId === subjectId) {
+                    navigateToPage(subjectType);
+                }
+                
+                showNotification('Deleted', `"${subject.name}" subject deleted`, 'warning');
+            } else {
+                const { subjectType, subjectId, noteId } = itemToDelete;
+                const subject = appData[subjectType].find(s => s.id === subjectId);
+                if (subject) {
+                    const note = subject.notes.find(n => n.id === noteId);
+                    subject.notes = subject.notes.filter(n => n.id !== noteId);
+                    renderNotes();
+                    
+                    // Update subject list to reflect new note count
+                    if (subjectType === 'koching') {
+                        renderKochingSubjects();
+                    } else {
+                        renderInstituteSubjects();
+                    }
+                    
+                    showNotification('Deleted', `"${note.title}" note deleted`, 'warning');
+                }
+            }
+            
+            saveData();
+            closeDeleteModal();
+        }
+        
+        // Edit Subject (placeholder - would need a separate modal)
+        function editSubject(type, subjectId) {
+            const subject = appData[type].find(s => s.id === subjectId);
+            const newName = prompt('Enter new subject name:', subject.name);
+            
+            if (newName && newName.trim() !== '') {
+                subject.name = newName.trim();
+                saveData();
+                
+                if (type === 'koching') {
+                    renderKochingSubjects();
+                } else {
+                    renderInstituteSubjects();
+                }
+                
+                // Update notes page title if we're viewing this subject's notes
+                if (currentPage === 'notes' && currentSubjectType === type && currentSubjectId === subjectId) {
+                    document.getElementById('notesPageTitle').textContent = `${subject.name} Notes`;
+                }
+                
+                showNotification('Updated', `Subject renamed to "${newName}"`, 'success');
+            }
+        }
+        
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+        
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('polytechnicNotesData', JSON.stringify(appData));
+        }
+        
+        // Load data from localStorage
+        function loadData() {
+            const savedData = localStorage.getItem('polytechnicNotesData');
+            if (savedData) {
+                appData = JSON.parse(savedData);
+            }
+        }
+        
+        // Initialize the app when the page loads
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
